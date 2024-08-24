@@ -1,7 +1,12 @@
-import { createServer, Response } from "miragejs";
+import { createServer, Model, Response } from "miragejs";
 
 export default function () {
   createServer({
+    models: {
+      users: Model,
+      todos: Model,
+    },
+
     routes() {
       this.namespace = "api"; // Prefix all routes with /api
 
@@ -14,6 +19,7 @@ export default function () {
           password: "force",
         },
       ];
+
       // Login Route
       this.post("/user/login", (schema, request) => {
         const { email, password } = JSON.parse(request.requestBody);
@@ -26,11 +32,7 @@ export default function () {
           // Simulate a successful login
           return {
             token: "dummy-jwt-token",
-            user: {
-              id: user.id,
-              name: user.name,
-              email: user.email,
-            },
+            user,
           };
         } else {
           // Simulate failed login
@@ -55,12 +57,47 @@ export default function () {
         }
       });
 
-      // Example users endpoint
-      this.get("/users", () => [
-        { id: "1", name: "Luke" },
-        { id: "2", name: "Leia" },
-        { id: "3", name: "Anakin" },
-      ]);
+      this.get("/todos", (schema) => {
+        return schema.todos.all();
+      });
+
+      // Add a new todo
+      this.post("/todos", (schema, request) => {
+        const attrs = JSON.parse(request.requestBody);
+        const newTodo = {
+          id: Date.now().toString(),
+          ...attrs,
+        };
+        return schema.todos.create(newTodo);
+      });
+
+      // Update an existing todo
+      this.put("/todos/:id", (schema, request) => {
+        let todo = schema.todos.find(request.params.id);
+        let attrs = JSON.parse(request.requestBody);
+        todo.update({
+          text: attrs.text,
+          isCompleted: attrs.isCompleted,
+        });
+      });
+
+      // Delete a todo
+      this.delete("/todos/:id", (schema, request) => {
+        let todo = schema.todos.find(request.params.id);
+        todo.destroy();
+      });
+
+      // Get a single todo's details
+      this.get("/todos/:id", (schema, request) => {
+        const id = request.params.id;
+        const todo = schema.todos.find((todo) => todo.id === id);
+
+        if (!todo) {
+          return new Response(404, {}, { message: "Todo not found" });
+        }
+
+        return todo;
+      });
     },
   });
 }

@@ -7,7 +7,6 @@ import { ToastContainer } from 'react-toastify';
 import "./index.css";
 import 'react-toastify/dist/ReactToastify.css';
 
-
 mirageServer();
 
 createRoot(document.getElementById("root")).render(

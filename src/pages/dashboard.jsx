@@ -1,6 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import Todo from "../components/Todo";
 
 export default function Dashboard() {
   const user = useSelector((state) => state.auth.data);
@@ -13,6 +14,7 @@ export default function Dashboard() {
     <>
       <div className="min-h-screen min-w-full text-4xl pt-24">
         <h1>Dashboard Page</h1>
+        <Todo />
       </div>
     </>
   );

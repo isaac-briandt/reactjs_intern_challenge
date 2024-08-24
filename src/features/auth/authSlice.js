@@ -30,6 +30,7 @@ export const login = createAsyncThunk(
   }
 );
 
+
 export const account = createAsyncThunk("auth/account", async () => {
   try {
     const { data } = await axios.get("/user/account");
