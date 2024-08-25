@@ -13,7 +13,6 @@ export default function Dashboard() {
   return (
     <>
       <div className="min-h-screen min-w-full text-4xl pt-24">
-        <h1>Dashboard Page</h1>
         <Todo />
       </div>
     </>
