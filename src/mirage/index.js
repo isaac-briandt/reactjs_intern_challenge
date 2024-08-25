@@ -7,6 +7,44 @@ export default function () {
       todos: Model,
     },
 
+    seeds(server) {
+      server.create("todo", {
+        id: "1",
+        text: "Create a portfolio website",
+        isCompleted: false,
+      }),
+        server.create("todo", {
+          id: "2",
+          text: "Complete Sprint tasks",
+          isCompleted: false,
+        }),
+        server.create("todo", {
+          id: "3",
+          text: "Lunch time",
+          isCompleted: false,
+        }),
+        server.create("todo", {
+          id: "4",
+          text: "Sleep",
+          isCompleted: false,
+        }),
+        server.create("todo", {
+          id: "5",
+          text: "Wake up",
+          isCompleted: false,
+        }),
+        server.create("todo", {
+          id: "6",
+          text: "Code",
+          isCompleted: false,
+        });
+      server.create("todo", {
+        id: "7",
+        text: "repeat cycle",
+        isCompleted: false,
+      });
+    },
+
     routes() {
       this.namespace = "api"; // Prefix all routes with /api
 
@@ -85,18 +123,6 @@ export default function () {
       this.delete("/todos/:id", (schema, request) => {
         let todo = schema.todos.find(request.params.id);
         todo.destroy();
-      });
-
-      // Get a single todo's details
-      this.get("/todos/:id", (schema, request) => {
-        const id = request.params.id;
-        const todo = schema.todos.find((todo) => todo.id === id);
-
-        if (!todo) {
-          return new Response(404, {}, { message: "Todo not found" });
-        }
-
-        return todo;
       });
     },
   });
